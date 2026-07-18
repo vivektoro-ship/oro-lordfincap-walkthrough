@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#c11b21">
+<title>Lord Fincap — Product Walkthrough</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#faf5ec; --paper-deep:#f4ecdd; --card:#ffffff; --rule:#ece2d2; --rule-soft:#f2ebde;
+  --ink:#241f1a; --ink-soft:#6c6255; --ink-faded:#9c9182;
+  --red:#c11b21; --red-deep:#9a0f16; --gold:#b8892a; --gold-bright:#f2bf49;
+  --display:"Fraunces",Georgia,serif; --body:"Manrope",-apple-system,sans-serif;
+  --mono:ui-monospace,"SF Mono",monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased;
+  background-image:radial-gradient(circle at 12% 4%,rgba(193,27,33,.05),transparent 42%),radial-gradient(circle at 92% 90%,rgba(242,191,73,.10),transparent 48%);background-attachment:fixed;}
+.wrap{max-width:70rem;margin:0 auto;padding:0 24px}
+img{max-width:100%}
+
+/* top bar */
+.topbar{position:sticky;top:0;z-index:40;background:rgba(250,245,236,.88);backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--rule)}
+.topbar .inner{max-width:70rem;margin:0 auto;padding:12px 24px;display:flex;align-items:center;gap:14px}
+.topbar img{height:30px;width:auto;display:block}
+.topbar .nm{font-family:var(--display);font-weight:600;font-size:17px;letter-spacing:-.01em}
+.topbar nav{margin-left:auto;display:flex;gap:8px}
+.topbar nav a{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faded);text-decoration:none;padding:8px 12px;border-radius:8px}
+.topbar nav a:hover{color:var(--red);background:#fff}
+
+/* masthead */
+.mast{text-align:center;padding:66px 0 6px}
+.kicker{font-family:var(--mono);font-weight:600;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold)}
+.mast h1{font-family:var(--display);font-weight:600;font-optical-sizing:auto;font-size:clamp(38px,6.5vw,68px);line-height:1.02;letter-spacing:-.02em;margin:16px 0 0;text-wrap:balance}
+.mast h1 em{font-style:italic;color:var(--red)}
+.mast .dek{font-family:var(--display);font-style:italic;font-size:clamp(15px,2vw,19px);color:var(--ink-soft);margin:18px auto 0;max-width:40rem;line-height:1.5}
+.orn{display:flex;align-items:center;justify-content:center;gap:14px;margin:28px auto 0;max-width:22rem}
+.orn .ln{height:1px;background:var(--rule);flex:1}
+.orn .gl{color:var(--gold);font-size:15px}
+
+/* platform section */
+.platform{padding:60px 0 8px}
+.phead{display:flex;align-items:baseline;gap:14px;border-bottom:2px solid var(--ink);padding-bottom:14px}
+.phead .pk{font-family:var(--mono);font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--red)}
+.phead h2{font-family:var(--display);font-weight:600;font-size:clamp(24px,3.4vw,36px);letter-spacing:-.015em}
+.phead .pc{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-faded);margin-left:auto}
+
+/* progress */
+.pbar{height:2px;background:var(--rule-soft);position:relative;overflow:hidden;margin-top:16px}
+.pbar i{position:absolute;left:0;top:0;bottom:0;background:var(--red);transition:width .3s ease}
+
+/* player */
+.player{display:grid;grid-template-columns:minmax(0,340px) 1fr;gap:clamp(28px,5vw,60px);align-items:center;margin-top:34px}
+.player.rev{grid-template-columns:1fr minmax(0,340px)}
+.player.rev .framecol{order:2}
+.player.wide{grid-template-columns:1fr}
+@media(max-width:820px){.player,.player.rev{grid-template-columns:1fr;gap:24px}.player.rev .framecol{order:0}}
+
+.framecol{display:flex;justify-content:center}
+.phone{width:330px;max-width:84vw;background:#fff;border:1px solid var(--rule);border-radius:38px;padding:11px;
+  box-shadow:0 34px 66px -28px rgba(120,20,20,.30),0 2px 8px rgba(0,0,0,.05)}
+.phone .notch{width:40%;height:5px;background:var(--rule);border-radius:99px;margin:2px auto 9px}
+.phone .screen{position:relative;border-radius:27px;overflow:hidden auto;background:var(--paper);border:1px solid var(--rule-soft);
+  height:min(680px,calc(100vh - 200px));scrollbar-width:thin}
+.phone .screen img{display:block;width:100%;height:auto}
+
+.browser{width:100%;max-width:1000px;margin:0 auto;background:#fff;border:1px solid var(--rule);border-radius:12px;overflow:hidden;
+  box-shadow:0 30px 60px -28px rgba(120,20,20,.28),0 2px 8px rgba(0,0,0,.05)}
+.browser .chrome{display:flex;align-items:center;gap:12px;padding:11px 14px;border-bottom:1px solid var(--rule-soft);background:var(--rule-soft)}
+.browser .tl{display:flex;gap:7px}
+.browser .tl i{width:11px;height:11px;border-radius:50%;background:#dfd6c6;display:block}
+.browser .tl i:first-child{background:var(--red);opacity:.75}
+.browser .addr{flex:1;font-family:var(--mono);font-size:10px;color:var(--ink-faded);background:#fff;border:1px solid var(--rule);border-radius:6px;padding:5px 12px;text-align:center;max-width:64%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.browser .bscreen{position:relative;max-height:calc(100vh - 220px);overflow:auto}
+.browser .bscreen img{display:block;width:100%;height:auto}
+
+/* red section-intro flash */
+.frameflash{position:absolute;inset:0;z-index:6;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px;
+  background:linear-gradient(160deg,var(--red),var(--red-deep));color:#fff;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .55s ease,visibility .55s ease}
+.frameflash.show{opacity:1;visibility:visible}
+.frameflash .k{font-family:var(--mono);font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold-bright);margin-bottom:14px}
+.frameflash h5{font-family:var(--display);font-weight:600;font-size:clamp(24px,3vw,30px);line-height:1.08;letter-spacing:-.01em;text-wrap:balance}
+.frameflash .sub{font-family:var(--body);font-size:12.5px;color:rgba(255,255,255,.72);margin-top:14px;max-width:22rem;line-height:1.5}
+
+.read{min-width:0}
+.fig{display:flex;align-items:flex-end;gap:13px;margin-bottom:13px}
+.fig .num{font-family:var(--display);font-weight:600;font-size:62px;line-height:.78;color:var(--red)}
+.fig .of{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-faded);padding-bottom:8px}
+.steplabel{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);background:#fff;border:1px solid var(--rule);border-radius:99px;padding:5px 12px;margin-bottom:14px}
+.read h3{font-family:var(--display);font-weight:600;font-size:clamp(23px,3vw,32px);letter-spacing:-.01em;line-height:1.1;text-wrap:balance}
+.read p{font-size:15.5px;line-height:1.6;color:var(--ink-soft);margin-top:12px;max-width:34rem;min-height:2.2em}
+
+.controls{display:flex;align-items:center;gap:10px;margin-top:26px;flex-wrap:wrap}
+button.nav{appearance:none;cursor:pointer;font-family:var(--mono);font-weight:600;font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  background:#fff;border:1px solid var(--rule);color:var(--ink);border-radius:8px;padding:12px 18px;transition:.16s}
+button.nav:hover{border-color:var(--ink)}
+button.nav:disabled{opacity:.4;cursor:default}
+button.nav.primary{background:var(--red);border-color:var(--red);color:#fff}
+button.nav.primary:hover{background:var(--red-deep);border-color:var(--red-deep)}
+
+.dots{display:flex;flex-wrap:wrap;gap:6px;margin-top:26px;border-top:1px solid var(--rule);padding-top:18px}
+.dot{appearance:none;cursor:pointer;background:#fff;border:1px solid var(--rule);color:var(--ink-faded);
+  font-family:var(--mono);font-size:10px;min-width:26px;height:26px;border-radius:6px;padding:0 4px;transition:.14s}
+.dot:hover{border-color:var(--gold);color:var(--gold)}
+.dot.active{background:var(--red);border-color:var(--red);color:#fff}
+.dot.done{color:var(--ink-soft);border-color:var(--rule)}
+
+/* flow tabs */
+.flowtabs{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px}
+.flowtab{appearance:none;cursor:pointer;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;background:#fff;border:1px solid var(--rule);color:var(--ink-soft);border-radius:99px;padding:10px 15px;transition:.15s;display:flex;align-items:center;gap:7px}
+.flowtab:hover{border-color:var(--gold);color:var(--gold)}
+.flowtab.active{background:var(--ink);border-color:var(--ink);color:#fff}
+.flowtab b{font-family:var(--display);font-weight:600;font-size:13px;color:var(--red)}
+.flowtab.active b{color:var(--gold-bright)}
+.flowintro{margin-top:26px}
+.flowintro h4{font-family:var(--display);font-weight:600;font-size:clamp(21px,2.7vw,28px);letter-spacing:-.01em}
+.flowintro p{font-size:14.5px;line-height:1.55;color:var(--ink-soft);margin-top:7px;max-width:46rem}
+
+footer{text-align:center;padding:56px 0 72px;color:var(--ink-faded);font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+
+/* lightbox */
+.lb{position:fixed;inset:0;z-index:60;background:rgba(30,18,12,.94);display:none;overflow:auto;padding:40px 16px;cursor:zoom-out}
+.lb.on{display:block}
+.lb img{display:block;width:auto;max-width:min(1400px,96vw);height:auto;max-height:none;margin:0 auto;border-radius:8px;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.lb .x{position:fixed;top:14px;right:16px;font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#fff;background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.3);border-radius:6px;padding:9px 14px;cursor:pointer}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="inner">
+  <img src="assets/logo.png" alt="Lord Fincap">
+  <span class="nm">Lord Fincap</span>
+  <nav><a href="#branch">Branch App</a><a href="#admin">Admin</a></nav>
+</div></div>
+
+<div class="wrap">
+  <div class="mast">
+    <div class="kicker">Branch Partner Platform</div>
+    <h1>The Lord Fincap <em>gold-loan</em> journey</h1>
+    <p class="dek">Every screen a partner touches — the full field app, then the admin console — walked end to end.</p>
+    <div class="orn"><span class="ln"></span><span class="gl">✦</span><span class="ln"></span></div>
+  </div>
+
+  <section class="platform" id="branch">
+    <div class="phead"><span class="pk">Mobile</span><h2>Branch App</h2><span class="pc" id="bc"></span></div>
+    <div class="pbar"><i id="bprog"></i></div>
+    <div class="player" id="branch-player"></div>
+    <div class="dots" id="branch-dots"></div>
+  </section>
+
+  <section class="platform" id="admin">
+    <div class="phead"><span class="pk">Desktop</span><h2>Admin Console</h2><span class="pc" id="ac"></span></div>
+    <div class="pbar"><i id="aprog"></i></div>
+    <div class="player wide" id="admin-player"></div>
+    <div class="dots" id="admin-dots"></div>
+  </section>
+</div>
+<footer>Lord Fincap · Product walkthrough · every screen built from Figma</footer>
+
+<div class="lb" id="lb"><span class="x">Close ✕</span><img id="lbimg" src="" alt=""></div>
+
+<script>
+const B='assets/all/';
+const BRANCH=[
+ {i:'s01.png',l:'Sign in',t:'Sign in with Google',c:'Partners open the Branch app and sign in with their Google account.'},
+ {i:'s02.png',l:'Home',t:'Create your first loan visit',c:'An empty home invites the partner to start their first loan visit.'},
+ {i:'s03.png',l:'Onboarding',t:'Mobile number',c:'Onboarding a new customer starts with the mobile number linked to their Aadhaar.'},
+ {i:'s04.png',l:'Onboarding',t:'Mobile number',c:'The number is entered and validated.'},
+ {i:'s05.png',l:'Onboarding',t:'Verify using OTP',c:'A 4-digit OTP sent over WhatsApp/SMS confirms the mobile.'},
+ {i:'s06.png',l:'Onboarding',t:'Verify using OTP',c:'Confirming the one-time password.'},
+ {i:'s07.png',l:'Onboarding',t:'Mobile verified',c:'The customer’s mobile number is verified.'},
+ {i:'s08.png',l:'Onboarding',t:'Verify email',c:'Capturing the customer’s email to receive a 6-digit OTP.'},
+ {i:'s09.png',l:'Onboarding',t:'Verify using OTP',c:'Confirming the email with a one-time password.'},
+ {i:'s10.png',l:'Onboarding',t:'Email verified',c:'The customer’s email is verified.'},
+ {i:'s11.png',l:'Onboarding',t:'Liveliness check',c:'A live selfie — look straight, stay in the circle, remove glasses.'},
+ {i:'s12.png',l:'Onboarding',t:'Liveliness check',c:'The face is detected and captured.'},
+ {i:'s13.png',l:'Onboarding',t:'Privacy policy & terms',c:'The customer accepts the privacy policy and terms & conditions.'},
+ {i:'s14.png',l:'Onboarding',t:'Choose city',c:'Selecting the operating city — Chennai, Hyderabad, Pune, Vijayawada.'},
+ {i:'s15.png',l:'Onboarding',t:'Keep documents handy',c:'A checklist of the Aadhaar and PAN needed for the ID flow.'},
+ {i:'s16.png',l:'Onboarding',t:'Identity verification',c:'Choosing DigiLocker to retrieve verified Aadhaar details.'},
+ {i:'s17.png',l:'Onboarding',t:'DigiLocker flow',c:'Fetching the customer’s identity from DigiLocker.'},
+ {i:'s18.png',l:'Onboarding',t:'Identity verified',c:'The Aadhaar identity is confirmed.'},
+ {i:'s19.png',l:'Onboarding',t:'Upload Aadhaar — front & back',c:'Photographing both sides of the Aadhaar card.'},
+ {i:'s20.png',l:'Onboarding',t:'Upload Aadhaar — front & back',c:'Both sides captured.'},
+ {i:'s21.png',l:'Onboarding',t:'PAN verification',c:'Entering the PAN linked to the customer.'},
+ {i:'s22.png',l:'Onboarding',t:'Upload PAN',c:'Photographing the PAN card.'},
+ {i:'s23.png',l:'Onboarding',t:'Upload PAN',c:'The PAN image is captured.'},
+ {i:'s24.png',l:'Onboarding',t:'PAN verified',c:'The PAN is verified.'},
+ {i:'s25.png',l:'Onboarding',t:'Father’s name',c:'Recording the customer’s father’s name.'},
+ {i:'s26.png',l:'Onboarding',t:'Mother’s name',c:'Recording the mother’s name as per Aadhaar.'},
+ {i:'s27.png',l:'Onboarding',t:'Marital status',c:'Marital status and spouse name.'},
+ {i:'s28.png',l:'Onboarding',t:'Employment type',c:'Salaried, self-employed, professional, retired and more.'},
+ {i:'s29.png',l:'Onboarding',t:'Annual income',c:'Selecting the customer’s income band.'},
+ {i:'s30.png',l:'Onboarding',t:'Current address',c:'The current address, with an option to reuse the permanent one.'},
+ {i:'s31.png',l:'Onboarding',t:'Upload address proof',c:'Photographing a document that proves the address.'},
+ {i:'s32.png',l:'Onboarding',t:'Upload address proof',c:'The address proof is captured.'},
+ {i:'s33.png',l:'Onboarding',t:'Address details',c:'Rented or owned, and years at the address.'},
+ {i:'s34.png',l:'Onboarding',t:'Address details',c:'Ownership recorded.'},
+ {i:'s35.png',l:'Onboarding',t:'Address details',c:'Residing-since captured.'},
+ {i:'s36.png',l:'Onboarding',t:'Add account details',c:'The bank account, IFSC and name that disbursal will reach.'},
+ {i:'s37.png',l:'Onboarding',t:'Verification in progress',c:'Validating the details just entered.'},
+ {i:'s38.png',l:'Onboarding',t:'Bank account added',c:'The account is added successfully.'},
+ {i:'s39.png',l:'Onboarding',t:'Add nominee',c:'Recording the loan’s nominee.'},
+ {i:'s40.png',l:'Onboarding',t:'Add nominee',c:'Nominee name and age.'},
+ {i:'s41.png',l:'Onboarding',t:'Add nominee',c:'Nominee details captured.'},
+ {i:'s42.png',l:'Onboarding',t:'Add nominee',c:'Nominee mobile added.'},
+ {i:'s43.png',l:'Onboarding',t:'Nominee address',c:'The nominee’s address.'},
+ {i:'s44.png',l:'Onboarding',t:'Nominee address',c:'Reusing the customer’s address for the nominee.'},
+ {i:'s45.png',l:'Onboarding',t:'Nominee address',c:'Nominee address captured.'},
+ {i:'s46.png',l:'Onboarding',t:'Onboarding successful',c:'KYC complete — the customer is onboarded.'},
+ {i:'s65.png',l:'Onboarding',t:'Loan visit progress',c:'A progress check on the visit — customer onboarding is done; next comes the gold loan (valuation & plan), then disbursal & storage.'},
+ {i:'s47.png',l:'Gold valuation',t:'Touchstone test',c:'Gold valuation begins with the touchstone. Before any item is added, the gold is rubbed on a touchstone and acid-tested to confirm its purity — the partner frames the streak and captures it as proof.'},
+ {i:'s48.png',l:'Gold valuation',t:'Touchstone captured',c:'The touchstone photo is saved — purity is proven first, and only then are the gold items added.'},
+ {i:'gv1.png',l:'Gold valuation',t:'Add gold item',c:'With purity established, each jewel is added — its type, quantity and quality (carat), then gross weight and any stone deduction. Net weight and 22-carat net weight (ANW) auto-calculate, and valuation photos plus a damage flag complete the record.'},
+ {i:'gv2.png',l:'Gold valuation',t:'Jewel type',c:'Picking what the item is — necklace, chain, earring and so on. Each type carries its own making-charge and wastage assumptions.'},
+ {i:'gv3.png',l:'Gold valuation',t:'Quantity',c:'How many pieces of this jewel are pledged (1–20) — the weights entered are for the whole set.'},
+ {i:'gv4.png',l:'Gold valuation',t:'Gold quality — carat',c:'The purity in carat (18–24), matching the touchstone result. Purity × net weight against the live gold rate sets the eligible loan value, so this is the single most important field.'},
+ {i:'gv5.png',l:'Gold valuation',t:'Valuation proof — on the scale',c:'For the weight, the jewels are placed on a calibrated scale. The partner lines the object up inside the guide before shooting so the reading is legible.'},
+ {i:'gv6.png',l:'Gold valuation',t:'Weight, on the record',c:'The proof photo captures the gold on the scale reading 24.75 g — the gross weight isn’t just typed in, it’s photographed as evidence.'},
+ {i:'gv7.png',l:'Gold valuation',t:'Damage photo',c:'If the item is marked damaged, its condition is photographed — framed inside the guide — so nothing is disputed later.'},
+ {i:'gv8.png',l:'Gold valuation',t:'Damage captured',c:'The condition photo is captured for the item’s record.'},
+ {i:'gv9.png',l:'Gold valuation',t:'Valuation photos added',c:'Captured photos collect in a gallery — add more angles or proceed. Purity (touchstone), weight (scale) and condition (damage) together fix the item’s value.'},
+ {i:'s52.png',l:'Gold valuation',t:'Valuation summary',c:'Each item’s net weight and value roll up into the total valuation across all items — the number that drives loan eligibility on the next screen.'},
+ {i:'s53.png',l:'Plan',t:'Choose plan',c:'Live eligibility drives the scheme choice — here Super Fixed Interest at ₹8,00,000.'},
+ {i:'s54.png',l:'Plan',t:'Confirm plan',c:'Reviewing the selected plan and the total loan amount.'},
+ {i:'s55.png',l:'Plan',t:'Choose bank account',c:'Selecting the verified account to receive the excess amount.'},
+ {i:'s56.png',l:'Credit',t:'Credit assessment proofs',c:'Uploading the signed credit assessment sheet and bank DD form.'},
+ {i:'s57.png',l:'Credit',t:'Credit assessment proofs',c:'The signed sheet is uploaded.'},
+ {i:'s58.png',l:'Credit',t:'Credit assessment proofs',c:'Uploads plus the proposed activity category.'},
+ {i:'s59.png',l:'Credit',t:'Credit assessment proofs',c:'All proofs uploaded and activity selected.'},
+ {i:'s60.png',l:'Credit',t:'Submit for approval',c:'The completed loan is sent to admin for approval.'},
+ {i:'s61.png',l:'Approval',t:'Approval in progress',c:'The loan waits for admin approval — status stays visible.'},
+ {i:'s62.png',l:'Approval',t:'Loan approved — eSign in progress',c:'The ₹8,00,000 loan is approved and the customer e-signs the agreement.'},
+ {i:'s64.png',l:'Disbursal',t:'Fund transferred — loan active',c:'The money reaches the customer’s account and the loan goes Active. Next, the pledged gold is sealed and stored.'},
+ {i:'sg1.png',l:'Store gold',t:'Upload seal photo',c:'The pledged gold (total net weight 106.82 g) is sealed in a tamper-evident packet and photographed inside the guide.'},
+ {i:'sg2.png',l:'Store gold',t:'Locker number',c:'The sealed packet is assigned a locker (123456) and its photo saved — add more angles, then store the gold.'},
+ {i:'sg3.png',l:'Store gold',t:'Gold stored',c:'The gold is locked in custody — the loan is fully live and the partner heads back home.'},
+ {i:'s66.png',l:'Servicing',t:'Loan visits',c:'The home list — searchable, with recent visits. Tap a visit to open it, or start a new loan visit.'},
+ {i:'s67.png',l:'Servicing',t:'Start a visit — mobile number',c:'Starting a new visit, the partner enters the customer’s mobile number.'},
+ {i:'s68.png',l:'Servicing',t:'Existing customer — start loan',c:'The number is recognised — a returning customer. KYC is already on file, so onboarding is skipped and the partner starts the loan directly.'},
+ {i:'s65.png',l:'Servicing',t:'Loan visit stepper',c:'Opening the visit shows its progress — onboarding done, gold loan in progress, disbursal & storage pending.'},
+ {i:'s69.png',l:'Servicing',t:'Loans',c:'Searching and picking a loan to service.'},
+ {i:'s70.png',l:'Servicing',t:'Loan details',c:'The whole loan — customer, gold items and status — in one record.'},
+ {i:'s71.png',l:'Release',t:'Liveliness check',c:'A live selfie confirms the customer at the release visit.'},
+ {i:'s72.png',l:'Release',t:'Liveliness check',c:'The face is detected.'},
+ {i:'s73.png',l:'Release',t:'Upload gold photo',c:'Photographing the gold for release — net weight recorded.'},
+ {i:'s74.png',l:'Release',t:'Upload gold photo',c:'Adding more gold photos.'},
+ {i:'s75.png',l:'Release',t:'Verify using OTP',c:'Customer OTP confirms the gold handover.'},
+ {i:'s76.png',l:'Release',t:'Verify using OTP',c:'The one-time password is confirmed and the release is processed.'},
+ {i:'s77.png',l:'Release',t:'Handover completed',c:'The gold is released to the customer.'},
+ {i:'s78.png',l:'Servicing',t:'Cancel this visit?',c:'Cancelling with a reason — customer unavailable, documents not ready, and more — with the option to resume later.'},
+ {i:'s79.png',l:'Servicing',t:'Visit cancelled',c:'The visit is cancelled.'},
+];
+const ADMIN=[
+ {i:'assets/admin/list.png',l:'Loan Visits',t:'All loan visits',a:'admin.lordfincap.com/loan-visits',c:'The admin landing — 10,100 loan visits in one list. Filter by All, Pending approval, In progress, Rejected or Cancelled; search by loan, customer or agent; and open any loan to act on it.'},
+ {i:'assets/admin/a01.png',l:'Gold rate',t:'Gold rates',a:'admin.lordfincap.com/gold-rate',c:'Every gold rate with its status. The live rate feeds loan eligibility across all plans.'},
+ {i:'assets/admin/a02.png',l:'Gold rate',t:'Add a new rate',a:'admin.lordfincap.com/gold-rate/new',c:'Adding a gold rate through a quick modal.'},
+ {i:'assets/admin/a03.png',l:'Gold rate',t:'Rate added',a:'admin.lordfincap.com/gold-rate',c:'The new rate is saved and goes live.'},
+ {i:'assets/admin/a04.png',l:'Plan config',t:'Plans',a:'admin.lordfincap.com/plans',c:'Every loan plan — type and status — in one table.'},
+ {i:'assets/admin/a05.png',l:'Plan config',t:'Create a plan',a:'admin.lordfincap.com/plans/new',c:'The plan builder — plan name, scheme name and scheme ID.'},
+ {i:'assets/admin/a06.png',l:'Plan config',t:'Plan details',a:'admin.lordfincap.com/plans/new',c:'Details filled in — eligibility, rate and fees — ready to save.'},
+ {i:'assets/admin/a07.png',l:'Plan config',t:'Plan detail',a:'admin.lordfincap.com/plans/lf-m-special-max-0625',c:'The saved plan — rate details and foreclosure slabs.'},
+ {i:'assets/admin/a08.png',l:'Approve',t:'Loan pending approval',a:'admin.lordfincap.com/loans/LFL0000017',c:'A submitted loan opens on its summary with Approve and Reject — review every tab first.'},
+ {i:'assets/admin/a16.png',l:'Approve',t:'Loan documents',a:'admin.lordfincap.com/loans/LFL0000017/docs',c:'Reviewing the gold-loan documents.'},
+ {i:'assets/admin/a17.png',l:'Approve',t:'Gold details',a:'admin.lordfincap.com/loans/LFL0000017/gold',c:'Appraisal details and each gold item pledged.'},
+ {i:'assets/admin/a18.png',l:'Approve',t:'Visit details',a:'admin.lordfincap.com/loans/LFL0000017/visit',c:'When the field visit was initiated and completed.'},
+ {i:'assets/admin/a19.png',l:'Approve',t:'Customer details',a:'admin.lordfincap.com/loans/LFL0000017/customer',c:'Aadhaar, PAN, liveness, income and address captured in the field.'},
+ {i:'assets/admin/a09.png',l:'Approve',t:'Approve the loan',a:'admin.lordfincap.com/loans/LFL0000017',c:'Confirming plan, amount and disbursal account before approving.'},
+ {i:'assets/admin/a10.png',l:'Approve',t:'Confirm approval',a:'admin.lordfincap.com/loans/LFL0000017',c:'A final confirmation to approve.'},
+ {i:'assets/admin/active.png',l:'Approve',t:'Loan active',a:'admin.lordfincap.com/loans/LFL0000017',c:'Approved — the gold loan is now Active.'},
+ {i:'assets/admin/a13.png',l:'Reject',t:'Reject the loan',a:'admin.lordfincap.com/loans/LFL0000017',c:'A pending loan can instead be rejected with a reason — recorded against the loan.'},
+ {i:'assets/admin/rejected.png',l:'Reject',t:'Loan rejected',a:'admin.lordfincap.com/loans/LFL0000017',c:'The loan is marked Rejected.'},
+ {i:'assets/admin/a20.png',l:'Customer',t:'User details',a:'admin.lordfincap.com/users/LFL0000688',c:'The customer’s full KYC profile and credit score.'},
+ {i:'assets/admin/a21.png',l:'Customer',t:'Bank accounts',a:'admin.lordfincap.com/users/LFL0000688/bank',c:'Verified bank accounts on file.'},
+ {i:'assets/admin/a22.png',l:'Customer',t:'Credit report',a:'admin.lordfincap.com/users/LFL0000688/credit',c:'Credit score and bureau report.'},
+ {i:'assets/admin/a23.png',l:'Customer',t:'Emails & nominees',a:'admin.lordfincap.com/users/LFL0000688/nominees',c:'Verified emails and the customer’s nominees.'},
+ {i:'assets/admin/a24.png',l:'Customer',t:'Underwriting',a:'admin.lordfincap.com/users/LFL0000688/underwriting',c:'Underwriting view with the latest credit report.'},
+ {i:'assets/admin/a25.png',l:'Customer',t:'Customer loans',a:'admin.lordfincap.com/users/LFL0000688/loans',c:'Every loan this customer holds.'},
+];
+
+const SECTION_TITLE={
+ 'Sign in':'Sign in','Home':'Loan visits','Onboarding':'Onboard the customer','Gold valuation':'Value the gold','Plan':'Choose a plan','Credit':'Assess credit','Approval':'Approval & e-sign','Disbursal':'Disburse funds','Store gold':'Store the gold','Servicing':'Service a visit','Release':'Release the gold',
+ 'Loan Visits':'Loan visits','Gold rate':'Set the gold rate','Plan config':'Create a plan','Approve':'Approve a loan','Reject':'Reject a loan','Customer':'Customer details'
+};
+const SECTION_SUB={
+ 'Onboarding':'The partner can cancel and resume this visit anytime.','Gold valuation':'Every value is backed by a photo — nothing is taken on trust.','Store gold':'The pledged gold is sealed, photographed and locked in a locker.','Servicing':'Open an existing visit, or start a new one.','Release':'Handing the gold back, verified by the customer.'
+};
+function makePlayer(opts){
+  const {data,base,type,playerEl,dotsEl,progEl,countEl,rev}=opts;
+  let idx=0,prevIdx=-1;
+  countEl.textContent=data.length+' screens';
+  // dots
+  dotsEl.innerHTML=data.map((d,i)=>`<button class="dot" data-i="${i}" title="${d.t}">${i+1}</button>`).join('');
+  const dots=[...dotsEl.children];
+  // shell
+  const src=d=> type==='phone' ? base+d.i : d.i;
+  playerEl.className='player'+(type==='browser'?' wide':(rev?' rev':''));
+  if(type==='phone'){
+    playerEl.innerHTML=
+      `<div class="framecol"><div class="phone"><div class="notch"></div><div class="screen"><img id="pimg"><div class="frameflash" id="pflash"><span class="k">How to</span><h5></h5><p class="sub"></p></div></div></div></div>`+
+      `<div class="read"><div class="fig"><span class="num" id="pnum"></span><span class="of" id="pof"></span></div>`+
+      `<span class="steplabel" id="plab"></span><h3 id="ptit"></h3><p id="pcap"></p>`+
+      `<div class="controls"><button class="nav" id="pprev">← Prev</button><button class="nav primary" id="pnext">Next →</button></div></div>`;
+  }else{
+    playerEl.innerHTML=
+      `<div class="read"><div class="fig"><span class="num" id="pnum"></span><span class="of" id="pof"></span></div>`+
+      `<span class="steplabel" id="plab"></span><h3 id="ptit"></h3><p id="pcap"></p>`+
+      `<div class="controls"><button class="nav" id="pprev">← Prev</button><button class="nav primary" id="pnext">Next →</button></div></div>`+
+      `<div class="framecol" style="display:block"><div class="browser"><div class="chrome"><span class="tl"><i></i><i></i><i></i></span><span class="addr" id="paddr"></span></div><div class="bscreen"><img id="pimg"><div class="frameflash" id="pflash"><span class="k">How to</span><h5></h5><p class="sub"></p></div></div></div></div>`;
+  }
+  const q=s=>playerEl.querySelector(s);
+  const img=q('#pimg'),num=q('#pnum'),of=q('#pof'),lab=q('#plab'),tit=q('#ptit'),cap=q('#pcap'),prev=q('#pprev'),next=q('#pnext'),addr=type==='browser'?q('#paddr'):null,scr=type==='phone'?q('.screen'):q('.bscreen'),flash=q('#pflash');
+  function render(){
+    const d=data[idx];
+    img.src=src(d); img.alt=d.t;
+    num.textContent=idx+1; of.textContent='/ '+data.length;
+    lab.textContent=d.l; tit.textContent=d.t; cap.textContent=d.c||'';
+    if(addr) addr.textContent=d.a||'';
+    prev.disabled=idx===0; next.disabled=idx===data.length-1;
+    if(scr) scr.scrollTop=0;
+    dots.forEach((b,i)=>{b.classList.toggle('active',i===idx);b.classList.toggle('done',i<idx);});
+    progEl.style.width=((idx+1)/data.length*100)+'%';
+    if(flash){
+      const fwd=idx>prevIdx, start=idx===0||data[idx].l!==data[idx-1].l;
+      if(fwd&&start){
+        flash.querySelector('h5').textContent=SECTION_TITLE[data[idx].l]||data[idx].l;
+        flash.querySelector('.sub').textContent=SECTION_SUB[data[idx].l]||'';
+        flash.classList.add('show');
+        clearTimeout(flash._t); flash._t=setTimeout(()=>flash.classList.remove('show'),1050);
+      }else{flash.classList.remove('show');clearTimeout(flash._t);}
+    }
+    prevIdx=idx;
+  }
+  prev.onclick=()=>{if(idx>0){idx--;render();}};
+  next.onclick=()=>{if(idx<data.length-1){idx++;render();}};
+  img.style.cursor='pointer';
+  img.onclick=()=>{if(idx<data.length-1){idx++;render();}};
+  dotsEl.onclick=e=>{const b=e.target.closest('.dot');if(b){idx=+b.dataset.i;render();playerEl.scrollIntoView({behavior:'smooth',block:'center'});}};
+  render();
+  return {focusPrev:()=>prev.click(),focusNext:()=>next.click(),el:playerEl};
+}
+
+const bp=makePlayer({data:BRANCH,base:B,type:'phone',playerEl:document.getElementById('branch-player'),dotsEl:document.getElementById('branch-dots'),progEl:document.getElementById('bprog'),countEl:document.getElementById('bc')});
+const ap=makePlayer({data:ADMIN,base:'',type:'browser',playerEl:document.getElementById('admin-player'),dotsEl:document.getElementById('admin-dots'),progEl:document.getElementById('aprog'),countEl:document.getElementById('ac')});
+
+// lightbox
+const lb=document.getElementById('lb'),lbimg=document.getElementById('lbimg');
+document.addEventListener('click',e=>{const z=e.target.closest('[data-zoom]');if(z){lbimg.src=z.getAttribute('data-zoom');lb.classList.add('on');}else if(e.target.closest('.lb')){lb.classList.remove('on');}});
+// keyboard: arrows drive whichever player is nearest the viewport centre
+function nearest(){const mid=innerHeight/2+scrollY;const b=document.getElementById('branch').offsetTop, a=document.getElementById('admin').offsetTop;return (Math.abs(mid-b)<=Math.abs(mid-a))?bp:ap;}
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){lb.classList.remove('on');return;}
+  if(lb.classList.contains('on'))return;
+  if(e.key==='ArrowRight'){nearest().focusNext();}
+  if(e.key==='ArrowLeft'){nearest().focusPrev();}
+});
+</script>
+</body>
+</html>
